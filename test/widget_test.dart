@@ -1,12 +1,22 @@
 import 'package:cricket_mate/app.dart';
+import 'package:cricket_mate/features/weather/data/cache_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('CricketMate smoke test launches and displays tabs', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const ProviderScope(child: CricketMateApp()));
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final prefs = await SharedPreferences.getInstance();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        child: const CricketMateApp(),
+      ),
+    );
     await tester.pumpAndSettle();
 
     // Verify initial sessions planner tab is visible
