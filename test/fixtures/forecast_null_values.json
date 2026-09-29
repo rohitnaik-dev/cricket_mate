@@ -1,0 +1,30 @@
+{
+  "latitude": 28.61,
+  "longitude": 77.20,
+  "utc_offset_seconds": 19800,
+  "timezone": "Asia/Kolkata",
+  "elevation": 216.0,
+  "hourly": {
+    "time": [
+      "2026-09-28T14:00",
+      "2026-09-28T15:00",
+      "2026-09-28T16:00"
+    ],
+    "temperature_2m": [32.5, null, 30.8],
+    "apparent_temperature": [null, 34.2, null],
+    "relative_humidity_2m": [55, null, 60],
+    "dew_point_2m": [null, 21.0, null],
+    "precipitation_probability": [5, null, 20],
+    "precipitation": [0.0, null, 0.4],
+    "wind_speed_10m": [null, 12.0, null],
+    "wind_gusts_10m": [null, null, 25.0],
+    "uv_index": [null, null, null],
+    "weather_code": [1, null, 51],
+    "is_day": [1, null, 0]
+  },
+  "daily": {
+    "time": ["2026-09-28"],
+    "sunrise": [null],
+    "sunset": ["2026-09-28T18:15"]
+  }
+}

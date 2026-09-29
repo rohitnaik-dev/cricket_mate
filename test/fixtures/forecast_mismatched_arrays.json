@@ -1,0 +1,21 @@
+{
+  "latitude": -33.86,
+  "longitude": 151.20,
+  "utc_offset_seconds": 36000,
+  "timezone": "Australia/Sydney",
+  "hourly": {
+    "time": [
+      "2026-09-28T09:00",
+      "2026-09-28T10:00",
+      "2026-09-28T11:00",
+      "2026-09-28T12:00"
+    ],
+    "temperature_2m": [19.0, 20.5],
+    "relative_humidity_2m": [65],
+    "precipitation": [0.0],
+    "weather_code": [0, 0, 1]
+  },
+  "daily": {
+    "time": ["2026-09-28"]
+  }
+}

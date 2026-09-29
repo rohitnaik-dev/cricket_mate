@@ -1,0 +1,31 @@
+{
+  "latitude": 51.51,
+  "longitude": -0.13,
+  "generationtime_ms": 0.32,
+  "utc_offset_seconds": 3600,
+  "timezone": "Europe/London",
+  "elevation": 16.0,
+  "hourly": {
+    "time": [
+      "2026-09-28T09:00",
+      "2026-09-28T10:00",
+      "2026-09-28T11:00"
+    ],
+    "temperature_2m": [15.2, 16.0, 17.3],
+    "apparent_temperature": [14.8, 15.6, 17.0],
+    "relative_humidity_2m": [74, 67, 62],
+    "dew_point_2m": [10.5, 9.8, 9.5],
+    "precipitation_probability": [0, 5, 10],
+    "precipitation": [0.0, 0.0, 0.0],
+    "wind_speed_10m": [7.6, 7.6, 6.8],
+    "wind_gusts_10m": [14.2, 15.0, 13.8],
+    "uv_index": [2.5, 3.8, 4.2],
+    "weather_code": [0, 1, 2],
+    "is_day": [1, 1, 1]
+  },
+  "daily": {
+    "time": ["2026-09-28"],
+    "sunrise": ["2026-09-28T06:56"],
+    "sunset": ["2026-09-28T18:45"]
+  }
+}
