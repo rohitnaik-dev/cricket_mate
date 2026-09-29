@@ -6,7 +6,7 @@ Every third-party package introduced to CricketMate must have a one-line justifi
 
 | Package | Classification | Justification |
 |---|---|---|
-| `flutter_riverpod` | Direct Dependency | Reactive, compile-safe state management across feature layers and dependency injection for repositories/services. |
+| `flutter_riverpod` | Direct Dependency | Compile-safe, testable state management and dependency injection without BuildContext dependency. |
 | `dio` | Direct Dependency | Robust HTTP client supporting connection timeouts, response parsing, and error mapping for Open-Meteo APIs. |
 | `shared_preferences` | Direct Dependency | Lightweight persistent key-value storage for offline caching, app settings, and preferred cricket venue. |
 | `intl` | Direct Dependency | Internationalization, localized date, time, and timestamp formatting for cricket session intervals. |
