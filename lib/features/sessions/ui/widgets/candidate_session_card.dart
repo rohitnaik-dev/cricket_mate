@@ -33,100 +33,111 @@ class CandidateSessionCard extends StatelessWidget {
     final timeStr = DateFormatter.formatSessionRange(window.start, window.end);
     final weather = candidate.weatherScores;
 
+    final heroTag =
+        'session_hero_${candidate.window.start.millisecondsSinceEpoch}_${candidate.window.end.millisecondsSinceEpoch}';
+
     return Semantics(
       label:
           'Rank #$rank session: $timeStr. Score ${candidate.score.round()}, ${candidate.label}. ${window.playerCount} of $totalSquadCount players available.',
       button: true,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: Row(
-              children: [
-                // Rank number badge
-                Container(
-                  width: 28,
-                  height: 28,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    '#$rank',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-
-                // Window details & weather snapshot
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        timeStr,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+      child: Hero(
+        tag: heroTag,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(16),
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Row(
+                  children: [
+                    // Rank number badge
+                    Container(
+                      width: 28,
+                      height: 28,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '#$rank',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
+                    ),
+                    const SizedBox(width: 12),
+
+                    // Window details & weather snapshot
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.person_outline,
-                            size: 15,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 4),
                           Text(
-                            '${window.playerCount}/$totalSquadCount players',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w500,
+                            timeStr,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Icon(
-                            Icons.thermostat_outlined,
-                            size: 15,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            '${weather.temperature.round()}°C',
-                            style: theme.textTheme.bodySmall,
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.person_outline,
+                                size: 15,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${window.playerCount}/$totalSquadCount players',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Icon(
+                                Icons.thermostat_outlined,
+                                size: 15,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                '${weather.temperature.round()}°C',
+                                style: theme.textTheme.bodySmall,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
 
-                // Score ring
-                ScoreRing(
-                  score: candidate.score,
-                  rating: candidate.rating,
-                  size: 46,
-                  strokeWidth: 4.5,
+                    // Score ring
+                    ScoreRing(
+                      score: candidate.score,
+                      rating: candidate.rating,
+                      size: 46,
+                      strokeWidth: 4.5,
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.5,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.chevron_right,
-                  size: 20,
-                  color: theme.colorScheme.onSurfaceVariant.withValues(
-                    alpha: 0.5,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

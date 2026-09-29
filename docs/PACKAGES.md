@@ -14,3 +14,4 @@ Every third-party package introduced to CricketMate must have a one-line justifi
 | `flutter_lints` | Dev Dependency | Enforces official Flutter community and Dart team style and quality linting rules. |
 | `mocktail` | Dev Dependency | Clean, null-safe mocking library for unit testing repositories, API clients, and Riverpod notifiers without code generation. |
 | `flutter_test` | SDK Dev Dependency | Core Flutter SDK testing framework for widget and unit test verification. |
+| `share_plus` | Direct Dependency | Cross-platform native system share sheet to invite cricket squad members via WhatsApp and messaging apps. |

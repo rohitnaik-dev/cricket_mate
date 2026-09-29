@@ -11,11 +11,11 @@ import '../../weather/state/weather_controller.dart';
 import '../domain/ball_type.dart';
 import '../domain/session_candidate.dart';
 import '../state/sessions_controller.dart';
+import 'session_detail_screen.dart';
 import 'widgets/candidate_session_card.dart';
 import 'widgets/hero_session_card.dart';
 import 'widgets/last_updated_badge.dart';
 import 'widgets/place_search_field.dart';
-import 'widgets/session_detail_modal.dart';
 import 'widgets/session_empty_view.dart';
 import 'widgets/session_filter_bar.dart';
 import 'widgets/session_shimmer.dart';
@@ -223,7 +223,7 @@ class SessionsScreen extends ConsumerWidget {
             totalSquadCount: squadCount,
             onViewSession: () {
               if (topCandidate != null) {
-                SessionDetailModal.show(context, topCandidate);
+                _openSessionDetail(context, topCandidate, placeName: placeName);
               }
             },
             onAddPlayers: () {
@@ -291,7 +291,8 @@ class SessionsScreen extends ConsumerWidget {
               candidate: candidate,
               rank: index + 2,
               totalSquadCount: squadCount,
-              onTap: () => SessionDetailModal.show(context, candidate),
+              onTap: () =>
+                  _openSessionDetail(context, candidate, placeName: placeName),
             );
           }),
         ] else if (topCandidate == null) ...[
@@ -364,7 +365,11 @@ class SessionsScreen extends ConsumerWidget {
                     totalSquadCount: squadCount,
                     onViewSession: () {
                       if (topCandidate != null) {
-                        SessionDetailModal.show(context, topCandidate);
+                        _openSessionDetail(
+                          context,
+                          topCandidate,
+                          placeName: placeName,
+                        );
                       }
                     },
                     onAddPlayers: () {
@@ -446,8 +451,11 @@ class SessionsScreen extends ConsumerWidget {
                         candidate: candidate,
                         rank: index + 2,
                         totalSquadCount: squadCount,
-                        onTap: () =>
-                            SessionDetailModal.show(context, candidate),
+                        onTap: () => _openSessionDetail(
+                          context,
+                          candidate,
+                          placeName: placeName,
+                        ),
                       );
                     }),
                   ],
@@ -466,6 +474,19 @@ class SessionsScreen extends ConsumerWidget {
                 ),
         ),
       ],
+    );
+  }
+
+  void _openSessionDetail(
+    BuildContext context,
+    SessionCandidate candidate, {
+    String? placeName,
+  }) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            SessionDetailScreen(candidate: candidate, placeName: placeName),
+      ),
     );
   }
 }

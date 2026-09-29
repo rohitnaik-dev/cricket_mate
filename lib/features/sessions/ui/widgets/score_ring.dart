@@ -11,6 +11,7 @@ class ScoreRing extends StatelessWidget {
     this.size = 64.0,
     this.strokeWidth = 6.0,
     this.showLabel = false,
+    this.animate = false,
   });
 
   /// Numeric score (0.0 - 100.0).
@@ -27,6 +28,9 @@ class ScoreRing extends StatelessWidget {
 
   /// Whether to show the rating label under the score.
   final bool showLabel;
+
+  /// Whether to animate the progress ring and count up implicitly.
+  final bool animate;
 
   Color _scoreColor(BuildContext context) {
     if (score >= 85.0) return const Color(0xFF2E7D32); // Dark Green
@@ -47,30 +51,63 @@ class ScoreRing extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CircularProgressIndicator(
-                  value: normalized,
-                  strokeWidth: strokeWidth,
-                  backgroundColor: color.withValues(alpha: 0.15),
-                  valueColor: AlwaysStoppedAnimation<Color>(color),
-                  strokeCap: StrokeCap.round,
-                ),
-                Text(
-                  score.round().toString(),
-                  style: TextStyle(
-                    fontSize: size * 0.35,
-                    fontWeight: FontWeight.bold,
-                    color: color,
+          if (animate)
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0.0, end: normalized),
+              duration: const Duration(milliseconds: 900),
+              curve: Curves.easeOutCubic,
+              builder: (context, animValue, _) {
+                return SizedBox(
+                  width: size,
+                  height: size,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        value: animValue,
+                        strokeWidth: strokeWidth,
+                        backgroundColor: color.withValues(alpha: 0.15),
+                        valueColor: AlwaysStoppedAnimation<Color>(color),
+                        strokeCap: StrokeCap.round,
+                      ),
+                      Text(
+                        (animValue * 100).round().toString(),
+                        style: TextStyle(
+                          fontSize: size * 0.35,
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
+            )
+          else
+            SizedBox(
+              width: size,
+              height: size,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    value: normalized,
+                    strokeWidth: strokeWidth,
+                    backgroundColor: color.withValues(alpha: 0.15),
+                    valueColor: AlwaysStoppedAnimation<Color>(color),
+                    strokeCap: StrokeCap.round,
+                  ),
+                  Text(
+                    score.round().toString(),
+                    style: TextStyle(
+                      fontSize: size * 0.35,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
           if (showLabel) ...[
             const SizedBox(height: 4),
             Container(

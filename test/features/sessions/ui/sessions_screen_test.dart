@@ -7,7 +7,7 @@ import 'package:cricket_mate/features/sessions/ui/sessions_screen.dart';
 import 'package:cricket_mate/features/sessions/ui/widgets/candidate_session_card.dart';
 import 'package:cricket_mate/features/sessions/ui/widgets/hero_session_card.dart';
 import 'package:cricket_mate/features/sessions/ui/widgets/last_updated_badge.dart';
-import 'package:cricket_mate/features/sessions/ui/widgets/session_detail_modal.dart';
+import 'package:cricket_mate/features/sessions/ui/session_detail_screen.dart';
 import 'package:cricket_mate/features/sessions/ui/widgets/session_filter_bar.dart';
 import 'package:cricket_mate/features/sessions/ui/widgets/session_shimmer.dart';
 import 'package:cricket_mate/features/weather/data/cache_store.dart';
@@ -187,14 +187,14 @@ void main() {
         expect(find.byType(CandidateSessionCard), findsWidgets);
         expect(find.text('Other Playing Windows'), findsOneWidget);
 
-        // Tap "View Session Details" to open bottom sheet modal
+        // Tap "View Session Details" to navigate to full SessionDetailScreen
         await tester.tap(find.text('View Session Details'));
         await tester.pumpAndSettle();
 
-        expect(find.byType(SessionDetailModal), findsOneWidget);
-        expect(find.text('Weather Analysis (60%)'), findsOneWidget);
-        expect(find.text('Ground & Daylight (10%)'), findsOneWidget);
-        expect(find.textContaining('Confirmed Squad'), findsOneWidget);
+        expect(find.byType(SessionDetailScreen), findsOneWidget);
+        expect(find.text('Why this time?'), findsOneWidget);
+        expect(find.text('Hourly Forecast'), findsOneWidget);
+        expect(find.text('Squad Attendance'), findsWidgets);
       },
     );
 
