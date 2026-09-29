@@ -6,6 +6,11 @@ Every third-party package introduced to CricketMate must have a one-line justifi
 
 | Package | Classification | Justification |
 |---|---|---|
-| `cupertino_icons` | Direct Dependency | Provides standard iOS-styled icon glyphs for cross-platform visual consistency. |
+| `flutter_riverpod` | Direct Dependency | Reactive, compile-safe state management across feature layers and dependency injection for repositories/services. |
+| `dio` | Direct Dependency | Robust HTTP client supporting connection timeouts, response parsing, and error mapping for Open-Meteo APIs. |
+| `shared_preferences` | Direct Dependency | Lightweight persistent key-value storage for offline caching, app settings, and preferred cricket venue. |
+| `intl` | Direct Dependency | Internationalization, localized date, time, and timestamp formatting for cricket session intervals. |
+| `flutter_localizations` | SDK Dependency | Core Flutter SDK localization support for localized widgets, calendars, and date/time pickers. |
 | `flutter_lints` | Dev Dependency | Enforces official Flutter community and Dart team style and quality linting rules. |
-| `flutter_test` | Dev Dependency | Core Flutter SDK testing framework for unit and widget test verification. |
+| `mocktail` | Dev Dependency | Clean, null-safe mocking library for unit testing repositories, API clients, and Riverpod notifiers without code generation. |
+| `flutter_test` | SDK Dev Dependency | Core Flutter SDK testing framework for widget and unit test verification. |
