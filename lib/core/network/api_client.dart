@@ -3,82 +3,127 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../errors/app_exception.dart';
 
-/// Provider exposing the configured [Dio] instance for the application.
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio(
-    BaseOptions(
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
-      headers: <String, Object?>{'Accept': 'application/json'},
-    ),
-  );
+export '../errors/app_exception.dart';
 
-  return dio;
+/// Provider exposing the singleton [ApiClient] instance.
+/// Dio is managed internally with no direct Dio access outside this class.
+final apiClientProvider = Provider<ApiClient>((ref) {
+  return ApiClient();
 });
 
-/// Shared network client utility converting Dio responses and errors
-/// into typed [AppException] instances.
+/// Thin HTTP client wrapping [Dio] with enforced 10s timeouts,
+/// a single [getJson] retrieval method, and consistent mapping to [AppException].
 class ApiClient {
-  const ApiClient(this._dio);
+  ApiClient({Dio? dio})
+    : _dio =
+          dio ??
+          Dio(
+            BaseOptions(
+              connectTimeout: const Duration(seconds: 10),
+              receiveTimeout: const Duration(seconds: 10),
+              sendTimeout: const Duration(seconds: 10),
+              responseType: ResponseType.json,
+              headers: const <String, Object?>{'Accept': 'application/json'},
+            ),
+          );
 
   final Dio _dio;
 
-  /// Executes an HTTP GET request and returns the parsed JSON response body.
-  Future<dynamic> get(
-    String url, {
+  /// Performs an HTTP GET request and returns the deserialized JSON object map.
+  /// Throws a strongly-typed [AppException] on network, timeout, server, or parsing failure.
+  Future<Map<String, dynamic>> getJson(
+    String path, {
     Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
   }) async {
     try {
       final response = await _dio.get<dynamic>(
-        url,
+        path,
         queryParameters: queryParameters,
+        options: headers != null ? Options(headers: headers) : null,
       );
-      return response.data;
+
+      final dynamic data = response.data;
+      if (data is Map<String, dynamic>) {
+        return data;
+      } else if (data is Map) {
+        return Map<String, dynamic>.from(data);
+      } else if (data == null) {
+        throw const FormatException('Received empty or null response body');
+      } else {
+        throw FormatException(
+          'Unexpected response data type: expected JSON object (Map) but got ${data.runtimeType}',
+        );
+      }
+    } on AppException {
+      rethrow;
     } on DioException catch (e) {
-      throw _mapDioError(e);
+      throw mapError(e);
+    } on FormatException catch (e) {
+      throw mapError(e);
+    } on TypeError catch (e) {
+      throw mapError(e);
     } catch (e) {
-      throw UnknownException('Unexpected network error', e);
+      throw mapError(e);
     }
   }
 
-  AppException _mapDioError(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-      case DioExceptionType.transformTimeout:
-        return const NetworkException(
-          'Connection timed out. Please check your network.',
-        );
-      case DioExceptionType.badResponse:
-        final statusCode = error.response?.statusCode;
-        return NetworkException(
-          'Server returned an error status: $statusCode',
-          error,
-          statusCode,
-        );
-      case DioExceptionType.cancel:
-        return const NetworkException('Request was cancelled.');
-      case DioExceptionType.connectionError:
-        return const NetworkException(
-          'Unable to reach server. Please check your internet connection.',
-        );
-      case DioExceptionType.badCertificate:
-        return const NetworkException(
-          'Security certificate verification failed.',
-        );
-      case DioExceptionType.unknown:
-        return NetworkException(
-          error.message ?? 'A network communication error occurred.',
-          error,
-        );
+  /// Maps errors, [DioException], [FormatException], and [TypeError] into
+  /// strongly-typed [AppException] instances with user-facing message keys.
+  static AppException mapError(Object error) {
+    if (error is AppException) {
+      return error;
     }
+
+    if (error is FormatException) {
+      return ParsingException(message: error.message, cause: error);
+    }
+
+    if (error is TypeError) {
+      return ParsingException(message: error.toString(), cause: error);
+    }
+
+    if (error is DioException) {
+      final Object? underlying = error.error;
+      if (underlying is FormatException) {
+        return ParsingException(message: underlying.message, cause: error);
+      }
+      if (underlying is TypeError) {
+        return ParsingException(message: underlying.toString(), cause: error);
+      }
+
+      switch (error.type) {
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.sendTimeout:
+        case DioExceptionType.receiveTimeout:
+        case DioExceptionType.transformTimeout:
+          return RequestTimeoutException(
+            message:
+                error.message ?? 'The request timed out. Please try again.',
+            cause: error,
+          );
+        case DioExceptionType.badResponse:
+          final int? statusCode = error.response?.statusCode;
+          return ServerException(
+            statusCode: statusCode,
+            message: 'Server returned error status: $statusCode',
+            cause: error,
+          );
+        case DioExceptionType.cancel:
+          return NetworkException(
+            message: 'The request was cancelled.',
+            cause: error,
+          );
+        case DioExceptionType.connectionError:
+        case DioExceptionType.badCertificate:
+        case DioExceptionType.unknown:
+          return NetworkException(
+            message: error.message ?? 'Unable to connect to the server.',
+            cause: error,
+          );
+      }
+    }
+
+    return NetworkException(message: error.toString(), cause: error);
   }
 }
-
-/// Provider exposing the [ApiClient] utility.
-final apiClientProvider = Provider<ApiClient>((ref) {
-  final dio = ref.watch(dioProvider);
-  return ApiClient(dio);
-});
