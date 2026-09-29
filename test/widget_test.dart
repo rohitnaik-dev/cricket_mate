@@ -20,15 +20,15 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify initial sessions planner tab is visible
-    expect(find.text('When should we play?'), findsOneWidget);
     expect(find.text('Sessions'), findsOneWidget);
-    expect(find.text('Weather'), findsOneWidget);
+    expect(find.text('Players'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
 
-    // Tap Weather navigation tab
-    await tester.tap(find.text('Weather'));
+    // Tap Players navigation tab
+    await tester.tap(find.text('Players'));
     await tester.pumpAndSettle();
 
-    // Verify Weather screen content is now active
-    expect(find.text('Ground Weather'), findsOneWidget);
+    // Verify Players screen is active
+    expect(find.text('Squad & Availability'), findsOneWidget);
   });
 }

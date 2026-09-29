@@ -129,7 +129,7 @@ class AvailabilitySlot {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is AvailabilitySlot &&
-        other.start.isAtSameMomentAs(start) && 
+        other.start.isAtSameMomentAs(start) &&
         other.end.isAtSameMomentAs(end);
   }
 

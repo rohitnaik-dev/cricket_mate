@@ -6,10 +6,10 @@ import 'core/l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'features/players/ui/players_screen.dart';
 import 'features/sessions/ui/sessions_screen.dart';
+import 'features/settings/state/settings_controller.dart';
 import 'features/settings/ui/settings_screen.dart';
-import 'features/weather/ui/weather_screen.dart';
 
-/// State provider for bottom navigation tab index.
+/// State provider for bottom navigation tab index (0: Sessions, 1: Players, 2: Settings).
 final navigationIndexProvider = StateProvider<int>((ref) => 0);
 
 /// Main application widget configuring theme, localization, and navigation.
@@ -18,12 +18,15 @@ class CricketMateApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsControllerProvider);
+
     return MaterialApp(
       title: AppStrings.appTitle,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: settings.themeMode,
+      locale: settings.locale,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -36,13 +39,12 @@ class CricketMateApp extends ConsumerWidget {
   }
 }
 
-/// Root scaffold holding persistent bottom navigation.
+/// Root scaffold holding persistent 3-destination bottom navigation: Sessions, Players, Settings.
 class MainNavigationScreen extends ConsumerWidget {
   const MainNavigationScreen({super.key});
 
   static const List<Widget> _destinations = <Widget>[
     SessionsScreen(),
-    WeatherScreen(),
     PlayersScreen(),
     SettingsScreen(),
   ];
@@ -63,11 +65,6 @@ class MainNavigationScreen extends ConsumerWidget {
             icon: Icon(Icons.sports_cricket_outlined),
             selectedIcon: Icon(Icons.sports_cricket),
             label: AppStrings.sessionsTab,
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.wb_sunny_outlined),
-            selectedIcon: Icon(Icons.wb_sunny),
-            label: AppStrings.weatherTab,
           ),
           NavigationDestination(
             icon: Icon(Icons.groups_outlined),
