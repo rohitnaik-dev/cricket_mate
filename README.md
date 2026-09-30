@@ -244,15 +244,15 @@ All architectural decisions, layer separation, domain logic, and accessibility c
 
 A rough, breakdown of actual time spent developing CricketMate:
 
-- Setup & Architecture Planning (~2h): Android studio setup, error solving,  Project scaffolding, Riverpod architecture setup, strict layer separation, and package justifications.
-- Weather & Caching Data Layer (~2.5h): Open-Meteo REST integration with Dio, DTO deserialization, `SharedPreferences` raw JSON cache store, and offline-first fallback logic.
-- Players Domain & Overlap Algorithm (~2h): Pure Dart 30-minute interval sweep (`findOverlaps`), quorum checks, and comprehensive edge-case unit testing.
-- Cricket Scoring Engine (~2.5h): Multi-variable scoring formulas (temperature comfort curve, rain probabilities, wind drift, dew point depression, wet outfield penalty, and hard veto caps).
-- UI & Presentation (~3h):
-  - Sessions Screen: Hero recommendation card, custom skeleton shimmer, filter bar, responsive landscape layout (~2h).
-  - Session Details Screen: Animated score ring, `CustomPainter` hourly conditions chart, WhatsApp invite sharing (~1.5h).
-  - Players & Settings Screens: Bottom sheet availability editor, time presets, live overlap preview (~1.5h).
-- Localization & Accessibility (~2h): `gen-l10n` setup, English and Hindi ARB dictionaries, 200% text scale verification, 48dp minimum touch targets.
-- Testing, CI & Documentation (~2h): `FakeWeatherRepository` async widget tests, GitHub Actions CI workflow, test coverage verification (78.7%), and documentation.
+Setup, planning - 3h,
+data layer - 2h,
+UI-3h,
+tests-manual in mobile test-2h,
+bugFix-2h. 
 
-Total Time: ~16 hours
+Total - 12 hrs
+
+## 📱 App Screenshots
+| Light Mode | Dark Mode |
+|:---:|:---:|
+| <img src="docs/screenshots/Light mode.jpg" width="320" alt="Screen Light" /> | <img src="docs/screenshots/Dark mode.jpg" width="320" alt=" Screen Dark" /> |
