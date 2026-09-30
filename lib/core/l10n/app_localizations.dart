@@ -1,6 +1,23 @@
 import 'package:flutter/widgets.dart';
 
-/// App-level string constants and localization helper.
+import 'generated/app_localizations.dart';
+
+export 'generated/app_localizations.dart';
+
+/// Extension on [BuildContext] for easy, ergonomic access to [AppLocalizations].
+extension LocalizedBuildContext on BuildContext {
+  /// Resolves the nearest [AppLocalizations] instance.
+  AppLocalizations get l10n {
+    final localizations = AppLocalizations.of(this);
+    if (localizations != null) {
+      return localizations;
+    }
+    // Fallback if accessed in widget tests or before localization delegates load
+    return lookupAppLocalizations(const Locale('en'));
+  }
+}
+
+/// App-level string constants and fallback localization helper.
 class AppStrings {
   const AppStrings._();
 
@@ -14,20 +31,4 @@ class AppStrings {
   static const String settingsTab = 'Settings';
   static const String attributionNotice = 'Weather data by Open-Meteo.com';
   static const String attributionUrl = 'https://open-meteo.com/';
-}
-
-/// Baseline localizations delegate for CricketMate.
-class AppLocalizationsDelegate extends LocalizationsDelegate<AppStrings> {
-  const AppLocalizationsDelegate();
-
-  @override
-  bool isSupported(Locale locale) => ['en'].contains(locale.languageCode);
-
-  @override
-  Future<AppStrings> load(Locale locale) {
-    return Future.value(const AppStrings._());
-  }
-
-  @override
-  bool shouldReload(AppLocalizationsDelegate old) => false;
 }

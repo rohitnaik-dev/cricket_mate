@@ -538,6 +538,7 @@ class _PresetChip extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ActionChip(
+      materialTapTargetSize: MaterialTapTargetSize.padded,
       avatar: Icon(icon, size: 16, color: theme.colorScheme.primary),
       label: Text(label),
       onPressed: onTap,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/reason_chip.dart';
 import '../../domain/session_candidate.dart';
+import 'reason_chip_localizer.dart';
 
 /// "Why this time?" breakdown section displaying labeled score progress bars,
 /// composite metric sub-scores, veto warnings, and ReasonChips.
@@ -13,6 +15,7 @@ class ScoreBreakdownBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Card(
       elevation: 0,
@@ -33,7 +36,7 @@ class ScoreBreakdownBars extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Why this time?',
+                    l10n.whyThisTime,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -105,7 +108,7 @@ class ScoreBreakdownBars extends StatelessWidget {
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-                            'Session Viability Veto Triggered',
+                            l10n.vetoBannerTitle,
                             style: theme.textTheme.labelMedium?.copyWith(
                               color: theme.colorScheme.onErrorContainer,
                               fontWeight: FontWeight.bold,
@@ -146,20 +149,33 @@ class ScoreBreakdownBars extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: candidate.reasonChips.map((chip) {
+                  final isDark = theme.brightness == Brightness.dark;
                   final (chipBg, chipFg, icon) = switch (chip.tone) {
                     ReasonTone.positive => (
-                      Colors.green.withValues(alpha: 0.15),
-                      Colors.green.shade800,
+                      isDark
+                          ? const Color(0xFF1B3320)
+                          : const Color(0xFFE8F5E9),
+                      isDark
+                          ? const Color(0xFFA5D6A7)
+                          : const Color(0xFF1B5E20),
                       Icons.check_circle_outline,
                     ),
                     ReasonTone.warning => (
-                      Colors.amber.withValues(alpha: 0.2),
-                      Colors.amber.shade900,
+                      isDark
+                          ? const Color(0xFF332B14)
+                          : const Color(0xFFFFF8E1),
+                      isDark
+                          ? const Color(0xFFFFE082)
+                          : const Color(0xFF5D4037),
                       Icons.warning_amber_rounded,
                     ),
                     ReasonTone.negative => (
-                      Colors.red.withValues(alpha: 0.15),
-                      Colors.red.shade800,
+                      isDark
+                          ? const Color(0xFF381414)
+                          : const Color(0xFFFFEBEE),
+                      isDark
+                          ? const Color(0xFFEF9A9A)
+                          : const Color(0xFFB71C1C),
                       Icons.error_outline,
                     ),
                     ReasonTone.neutral => (
@@ -185,7 +201,7 @@ class ScoreBreakdownBars extends StatelessWidget {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            chip.message,
+                            chip.getLocalizedMessage(context),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

@@ -218,41 +218,109 @@ abstract final class SessionScorer {
 
     // Veto callouts first
     for (final reason in vetoReasons) {
-      chips.add(ReasonChip.negative(reason));
+      if (reason.contains('Thunderstorm')) {
+        chips.add(
+          ReasonChip.negative(reason, messageKey: 'reasonThunderstorm'),
+        );
+      } else if (reason.contains('rain')) {
+        final maxRain = windowHours.fold<int>(
+          0,
+          (max, h) => math.max(max, h.precipitationProbability ?? 0),
+        );
+        chips.add(
+          ReasonChip.negative(
+            reason,
+            messageKey: 'reasonRainRisk',
+            arguments: {'percent': maxRain},
+          ),
+        );
+      } else if (reason.contains('quorum')) {
+        chips.add(
+          ReasonChip.negative(
+            reason,
+            messageKey: 'reasonBelowQuorum',
+            arguments: {'count': window.playerCount, 'quorum': quorum},
+          ),
+        );
+      } else if (reason.contains('Leather')) {
+        chips.add(
+          ReasonChip.negative(reason, messageKey: 'reasonLeatherDaylight'),
+        );
+      } else {
+        chips.add(ReasonChip.negative(reason));
+      }
     }
 
     // Weather positive callouts
     if (weatherScores.rain >= 85.0 &&
         !vetoReasons.any((r) => r.contains('rain'))) {
-      chips.add(const ReasonChip.positive('Low rain chance'));
+      chips.add(
+        const ReasonChip.positive(
+          'Low rain chance',
+          messageKey: 'reasonLowRain',
+        ),
+      );
     }
 
     if (weatherScores.temperature >= 85.0) {
-      chips.add(const ReasonChip.positive('Ideal cricket temperature'));
+      chips.add(
+        const ReasonChip.positive(
+          'Ideal cricket temperature',
+          messageKey: 'reasonIdealTemp',
+        ),
+      );
     } else if (weatherScores.temperature < 40.0) {
-      chips.add(const ReasonChip.warning('Chilly temperature'));
+      chips.add(
+        const ReasonChip.warning(
+          'Chilly temperature',
+          messageKey: 'reasonChillyTemp',
+        ),
+      );
     }
 
     if (weatherScores.wind >= 85.0) {
-      chips.add(const ReasonChip.positive('Gentle breeze'));
+      chips.add(
+        const ReasonChip.positive(
+          'Gentle breeze',
+          messageKey: 'reasonGentleBreeze',
+        ),
+      );
     } else if (weatherScores.wind < 40.0) {
-      chips.add(const ReasonChip.warning('Gusty wind conditions'));
+      chips.add(
+        const ReasonChip.warning(
+          'Gusty wind conditions',
+          messageKey: 'reasonGustyWind',
+        ),
+      );
     }
 
     // Outfield callouts
     if (conditionsScores.past24hPrecipitationMm >= 4.0) {
+      final mm = conditionsScores.past24hPrecipitationMm.toStringAsFixed(1);
       chips.add(
         ReasonChip.negative(
-          "Wet ground from last night's rain (${conditionsScores.past24hPrecipitationMm.toStringAsFixed(1)}mm)",
+          "Wet ground from last night's rain (${mm}mm)",
+          messageKey: 'reasonWetGround',
+          arguments: {'mm': mm},
         ),
       );
     } else if (conditionsScores.wetOutfield >= 90.0) {
-      chips.add(const ReasonChip.positive('Dry outfield'));
+      chips.add(
+        const ReasonChip.positive(
+          'Dry outfield',
+          messageKey: 'reasonDryOutfield',
+        ),
+      );
     }
 
     // Dew callouts
     if (conditionsScores.dewRisk < 50.0) {
-      chips.add(const ReasonChip.warning('Evening dew risk (slippery ball)'));
+      chips.add(
+        const ReasonChip.warning(
+          'Evening dew risk (slippery ball)',
+          messageKey: 'reasonDewRisk',
+        ),
+      );
     }
 
     // Availability callouts
@@ -260,6 +328,8 @@ abstract final class SessionScorer {
       chips.add(
         ReasonChip.positive(
           'Squad quorum reached (${window.playerCount}/$quorum players)',
+          messageKey: 'reasonQuorumReached',
+          arguments: {'count': window.playerCount, 'quorum': quorum},
         ),
       );
     }

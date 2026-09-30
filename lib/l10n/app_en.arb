@@ -1,0 +1,770 @@
+{
+  "@@locale": "en",
+  "appTitle": "CricketMate",
+  "@appTitle": {
+    "description": "Main application title"
+  },
+  "sessionsTab": "Sessions",
+  "@sessionsTab": {
+    "description": "Label for the Sessions navigation tab"
+  },
+  "playersTab": "Players",
+  "@playersTab": {
+    "description": "Label for the Players navigation tab"
+  },
+  "settingsTab": "Settings",
+  "@settingsTab": {
+    "description": "Label for the Settings navigation tab"
+  },
+
+  "weatherAttribution": "Weather data by Open-Meteo.com",
+  "@weatherAttribution": {
+    "description": "Short weather attribution notice"
+  },
+  "weatherAttributionFull": "Weather data provided by Open-Meteo.com (CC BY 4.0)",
+  "@weatherAttributionFull": {
+    "description": "Full weather data attribution with license"
+  },
+
+  "errorNetworkConnection": "Unable to connect to the server. Please check your internet connection.",
+  "@errorNetworkConnection": {
+    "description": "Error message for offline or network connectivity issues"
+  },
+  "errorRequestTimeout": "The request timed out. Please try again.",
+  "@errorRequestTimeout": {
+    "description": "Error message for network request timeout"
+  },
+  "errorServer": "The server encountered an error. Please try again later.",
+  "@errorServer": {
+    "description": "Error message for server HTTP 5xx errors"
+  },
+  "errorParsingFailed": "Failed to process server response data.",
+  "@errorParsingFailed": {
+    "description": "Error message for malformed JSON or parsing errors"
+  },
+  "errorGeneric": "An unexpected error occurred.",
+  "@errorGeneric": {
+    "description": "Generic unexpected error message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Button label to retry an action"
+  },
+
+  "searchHint": "Search cricket ground / city...",
+  "@searchHint": {
+    "description": "Hint text in the location search bar"
+  },
+  "searchNoResults": "No cricket grounds or cities found",
+  "@searchNoResults": {
+    "description": "Message displayed when geocoding search yields zero results"
+  },
+  "searchPrompt": "Choose a Cricket Ground",
+  "@searchPrompt": {
+    "description": "Title prompting user to select a location"
+  },
+  "searchPromptSubtitle": "Use the search bar above to search for your local cricket ground or city to check conditions.",
+  "@searchPromptSubtitle": {
+    "description": "Subtitle prompting user to search a location"
+  },
+  "searchLocationButton": "Search Location",
+  "@searchLocationButton": {
+    "description": "CTA button to search location"
+  },
+  "unableToLoadWeather": "Unable to Load Weather",
+  "@unableToLoadWeather": {
+    "description": "Title when weather fetching fails"
+  },
+  "bestTimeToPlay": "BEST TIME TO PLAY",
+  "@bestTimeToPlay": {
+    "description": "Header title on the top ranked session card"
+  },
+  "viewSessionDetails": "View Session Details",
+  "@viewSessionDetails": {
+    "description": "Button to inspect details of a session candidate"
+  },
+  "noViableSessionsTitle": "No Sessions Planned",
+  "@noViableSessionsTitle": {
+    "description": "Title when no candidate playing windows match requirements"
+  },
+  "noViableSessionsSubtitle": "Add players or adjust match settings to find optimal playing windows.",
+  "@noViableSessionsSubtitle": {
+    "description": "Subtitle when no candidate sessions match"
+  },
+  "addPlayersButton": "Add Players",
+  "@addPlayersButton": {
+    "description": "CTA button to navigate to players screen"
+  },
+  "liveForecast": "Live Forecast",
+  "@liveForecast": {
+    "description": "Badge indicating fresh online weather data"
+  },
+  "offlineCache": "Offline (Updated {timeAgo})",
+  "@offlineCache": {
+    "description": "Badge indicating offline cached weather data",
+    "placeholders": {
+      "timeAgo": {
+        "type": "String",
+        "example": "15m ago"
+      }
+    }
+  },
+  "updating": "Updating...",
+  "@updating": {
+    "description": "Status text while updating data"
+  },
+  "justNow": "just now",
+  "@justNow": {
+    "description": "Time ago for moments ago"
+  },
+  "minutesAgo": "{count, plural, =1{1 min ago} other{{count} mins ago}}",
+  "@minutesAgo": {
+    "description": "Relative time in minutes",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "hoursAgo": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
+  "@hoursAgo": {
+    "description": "Relative time in hours",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "otherSessionsTitle": "Other Candidate Windows",
+  "@otherSessionsTitle": {
+    "description": "Header for secondary session recommendations"
+  },
+  "rankBadge": "#{rank}",
+  "@rankBadge": {
+    "description": "Rank indicator for session candidate",
+    "placeholders": {
+      "rank": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "ballTypeLabel": "Ball",
+  "@ballTypeLabel": {
+    "description": "Label for ball type filter chip"
+  },
+  "durationLabel": "Duration",
+  "@durationLabel": {
+    "description": "Label for duration filter chip"
+  },
+  "minPlayersLabel": "Min Players",
+  "@minPlayersLabel": {
+    "description": "Label for minimum players filter chip"
+  },
+  "sortByLabel": "Sort By",
+  "@sortByLabel": {
+    "description": "Label for sorting menu"
+  },
+  "sortScore": "Best Score",
+  "@sortScore": {
+    "description": "Sort option: best overall score"
+  },
+  "sortTime": "Earliest Time",
+  "@sortTime": {
+    "description": "Sort option: earliest start time"
+  },
+  "sortAttendance": "Highest Attendance",
+  "@sortAttendance": {
+    "description": "Sort option: highest player turnout"
+  },
+
+  "ballTypeTennis": "Tennis",
+  "@ballTypeTennis": {
+    "description": "Tennis ball type name"
+  },
+  "ballTypeTennisDesc": "Standard light tennis ball. High dew & wind tolerance.",
+  "@ballTypeTennisDesc": {
+    "description": "Tennis ball characteristics description"
+  },
+  "ballTypeLeather": "Leather",
+  "@ballTypeLeather": {
+    "description": "Leather ball type name"
+  },
+  "ballTypeLeatherDesc": "Traditional red cricket ball. Strictly requires daylight.",
+  "@ballTypeLeatherDesc": {
+    "description": "Leather ball characteristics description"
+  },
+  "ballTypeBox": "Box",
+  "@ballTypeBox": {
+    "description": "Box turf ball type name"
+  },
+  "ballTypeBoxDesc": "Enclosed turf cricket ball. Weather resilient.",
+  "@ballTypeBoxDesc": {
+    "description": "Box ball characteristics description"
+  },
+
+  "durationHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@durationHours": {
+    "description": "Duration formatted in hours",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "durationHoursShort": "{count}h",
+  "@durationHoursShort": {
+    "description": "Short duration in hours",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "1.5"
+      }
+    }
+  },
+
+  "ratingExceptional": "Exceptional",
+  "@ratingExceptional": {
+    "description": "Session rating label for scores >= 85"
+  },
+  "ratingGreat": "Great",
+  "@ratingGreat": {
+    "description": "Session rating label for scores 70-84"
+  },
+  "ratingGood": "Good",
+  "@ratingGood": {
+    "description": "Session rating label for scores 55-69"
+  },
+  "ratingFair": "Fair",
+  "@ratingFair": {
+    "description": "Session rating label for scores 40-54"
+  },
+  "ratingPoor": "Poor",
+  "@ratingPoor": {
+    "description": "Session rating label for scores < 40"
+  },
+
+  "scoreWeatherLabel": "Weather",
+  "@scoreWeatherLabel": {
+    "description": "Label for weather component in score breakdown"
+  },
+  "scoreAvailabilityLabel": "Squad Availability",
+  "@scoreAvailabilityLabel": {
+    "description": "Label for player availability in score breakdown"
+  },
+  "scoreConditionsLabel": "Outfield Conditions",
+  "@scoreConditionsLabel": {
+    "description": "Label for ground and dew conditions in score breakdown"
+  },
+  "whyThisTime": "Why this time?",
+  "@whyThisTime": {
+    "description": "Section header explaining session rating"
+  },
+  "vetoBannerTitle": "Session Viability Veto Triggered",
+  "@vetoBannerTitle": {
+    "description": "Warning banner title when hard veto conditions apply"
+  },
+
+  "reasonThunderstorm": "Thunderstorm hazard (lightning danger)",
+  "@reasonThunderstorm": {
+    "description": "Veto reason: active thunderstorm"
+  },
+  "reasonRainRisk": "High rain probability ({percent}%)",
+  "@reasonRainRisk": {
+    "description": "Veto reason: rain probability > 70%",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "85"
+      }
+    }
+  },
+  "reasonBelowQuorum": "Below squad quorum ({count}/{quorum} required players)",
+  "@reasonBelowQuorum": {
+    "description": "Veto reason: fewer players than quorum",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "quorum": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+  "reasonLeatherDaylight": "Leather ball requires natural daylight",
+  "@reasonLeatherDaylight": {
+    "description": "Veto reason: leather ball played in darkness"
+  },
+  "reasonLowRain": "Low rain chance",
+  "@reasonLowRain": {
+    "description": "Positive reason: favorable low rain"
+  },
+  "reasonIdealTemp": "Ideal cricket temperature",
+  "@reasonIdealTemp": {
+    "description": "Positive reason: comfortable temperature"
+  },
+  "reasonChillyTemp": "Chilly temperature",
+  "@reasonChillyTemp": {
+    "description": "Warning reason: cold temperature"
+  },
+  "reasonGentleBreeze": "Gentle breeze",
+  "@reasonGentleBreeze": {
+    "description": "Positive reason: mild wind"
+  },
+  "reasonGustyWind": "Gusty wind conditions",
+  "@reasonGustyWind": {
+    "description": "Warning reason: high wind speed or gusts"
+  },
+  "reasonWetGround": "Wet ground from last night's rain ({mm}mm)",
+  "@reasonWetGround": {
+    "description": "Negative reason: wet outfield from recent rain",
+    "placeholders": {
+      "mm": {
+        "type": "String",
+        "example": "6.5"
+      }
+    }
+  },
+  "reasonDryOutfield": "Dry outfield",
+  "@reasonDryOutfield": {
+    "description": "Positive reason: dry playing surface"
+  },
+  "reasonDewRisk": "Evening dew risk (slippery ball)",
+  "@reasonDewRisk": {
+    "description": "Warning reason: dew point temperature gap creates moisture"
+  },
+  "reasonQuorumReached": "Squad quorum reached ({count}/{quorum} players)",
+  "@reasonQuorumReached": {
+    "description": "Positive reason: quorum satisfied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "8"
+      },
+      "quorum": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+
+  "squadAttendanceTitle": "Squad Attendance",
+  "@squadAttendanceTitle": {
+    "description": "Title for players attendance section"
+  },
+  "confirmedPlayersCount": "Confirmed ({count})",
+  "@confirmedPlayersCount": {
+    "description": "Header for confirmed available players",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+  "missingPlayersCount": "Missing ({count})",
+  "@missingPlayersCount": {
+    "description": "Header for missing/unavailable squad members",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "allSquadAvailable": "All squad members available!",
+  "@allSquadAvailable": {
+    "description": "Notice when entire registered squad is confirmed"
+  },
+  "noPlayersAvailable": "No squad members available for this window.",
+  "@noPlayersAvailable": {
+    "description": "Notice when zero squad members can play"
+  },
+  "playerCountPlural": "{count, plural, =0{No players} =1{1 player} other{{count} players}}",
+  "@playerCountPlural": {
+    "description": "ICU plural for player count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "4"
+      }
+    }
+  },
+  "playersAvailableOutOf": "{available}/{total} players available",
+  "@playersAvailableOutOf": {
+    "description": "Format for turnout fraction",
+    "placeholders": {
+      "available": {
+        "type": "int",
+        "example": "6"
+      },
+      "total": {
+        "type": "int",
+        "example": "8"
+      }
+    }
+  },
+
+  "hourlyConditionsTitle": "Hourly Conditions",
+  "@hourlyConditionsTitle": {
+    "description": "Title for hourly weather forecast strip"
+  },
+  "hourlyConditionsSubtitle": "Match Window ± 2h",
+  "@hourlyConditionsSubtitle": {
+    "description": "Subtitle indicating hourly chart span"
+  },
+  "legendRainProb": "Rain %",
+  "@legendRainProb": {
+    "description": "Legend label for rain probability bars"
+  },
+  "legendTemperature": "Temp (°C)",
+  "@legendTemperature": {
+    "description": "Legend label for temperature curve"
+  },
+  "legendSunset": "Sunset",
+  "@legendSunset": {
+    "description": "Legend label for sunset dashed marker"
+  },
+  "legendMatchWindow": "Match Window",
+  "@legendMatchWindow": {
+    "description": "Legend label for highlighted match window band"
+  },
+
+  "shareInviteButton": "Share Invite via WhatsApp",
+  "@shareInviteButton": {
+    "description": "Button label to share match invitation"
+  },
+  "shareInviteTooltip": "Share Invite",
+  "@shareInviteTooltip": {
+    "description": "Tooltip for share button"
+  },
+  "inviteTitle": "🏏 *Cricket Session Invitation*",
+  "@inviteTitle": {
+    "description": "WhatsApp invite markdown title"
+  },
+  "inviteVenue": "📍 *Venue:*",
+  "@inviteVenue": {
+    "description": "WhatsApp invite venue label"
+  },
+  "inviteDate": "📅 *Date:*",
+  "@inviteDate": {
+    "description": "WhatsApp invite date label"
+  },
+  "inviteTime": "⏰ *Time:*",
+  "@inviteTime": {
+    "description": "WhatsApp invite time label"
+  },
+  "inviteBall": "🏏 *Ball:*",
+  "@inviteBall": {
+    "description": "WhatsApp invite ball type label"
+  },
+  "inviteScore": "⭐ *Session Score:*",
+  "@inviteScore": {
+    "description": "WhatsApp invite score label"
+  },
+  "inviteKeyReasons": "📋 *Key Conditions:*",
+  "@inviteKeyReasons": {
+    "description": "WhatsApp invite conditions label"
+  },
+  "inviteConfirmedLineup": "👥 *Confirmed Lineup:*",
+  "@inviteConfirmedLineup": {
+    "description": "WhatsApp invite lineup label"
+  },
+  "inviteFooter": "Let's play cricket! Scheduled via CricketMate.",
+  "@inviteFooter": {
+    "description": "WhatsApp invite closing greeting"
+  },
+
+  "squadScreenTitle": "Squad & Availability",
+  "@squadScreenTitle": {
+    "description": "Title of the Players & Availability screen"
+  },
+  "addPlayerTooltip": "Add Player",
+  "@addPlayerTooltip": {
+    "description": "Tooltip for add player icon"
+  },
+  "addPlayerButton": "Add Player",
+  "@addPlayerButton": {
+    "description": "Button label to add a new player"
+  },
+  "addFirstPlayerButton": "Add First Player",
+  "@addFirstPlayerButton": {
+    "description": "Button label on empty squad screen"
+  },
+  "noPlayersYetTitle": "No players added yet",
+  "@noPlayersYetTitle": {
+    "description": "Empty state title when squad has 0 players"
+  },
+  "noPlayersYetSubtitle": "Add your cricket squad members to find the best match time.",
+  "@noPlayersYetSubtitle": {
+    "description": "Empty state subtitle for players screen"
+  },
+  "bestSquadOverlap": "BEST SQUAD OVERLAP",
+  "@bestSquadOverlap": {
+    "description": "Header title on the live squad overlap preview card"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Label for Today day tab/selector"
+  },
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Label for Tomorrow day tab/selector"
+  },
+  "tomorrowShort": "Tmrw",
+  "@tomorrowShort": {
+    "description": "Short chip label for tomorrow"
+  },
+  "noCommonOverlap": "No common overlap found",
+  "@noCommonOverlap": {
+    "description": "Message when squad members have no overlapping availability"
+  },
+  "noCommonOverlapSubtitle": "Adjust player availability to create an overlapping match window.",
+  "@noCommonOverlapSubtitle": {
+    "description": "Subtitle when no overlap exists"
+  },
+  "addPlayersToCalculate": "Add players to calculate overlap",
+  "@addPlayersToCalculate": {
+    "description": "Prompt when squad is empty in overlap card"
+  },
+  "editAvailabilityTooltip": "Edit availability for {name}",
+  "@editAvailabilityTooltip": {
+    "description": "Tooltip for editing player availability",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Virat Kohli"
+      }
+    }
+  },
+  "removePlayerTooltip": "Remove {name}",
+  "@removePlayerTooltip": {
+    "description": "Tooltip for removing a player",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Rohit Sharma"
+      }
+    }
+  },
+  "noSlotsScheduled": "No slots scheduled",
+  "@noSlotsScheduled": {
+    "description": "Label shown when a player has no slots set"
+  },
+  "playerRemovedSnackbar": "Player {name} removed",
+  "@playerRemovedSnackbar": {
+    "description": "Snackbar text after deleting a player",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Jasprit Bumrah"
+      }
+    }
+  },
+  "undo": "Undo",
+  "@undo": {
+    "description": "Action label to undo an action in snackbar"
+  },
+
+  "addPlayerDialogTitle": "Add Player",
+  "@addPlayerDialogTitle": {
+    "description": "Title of add player dialog"
+  },
+  "playerNameLabel": "Player Name",
+  "@playerNameLabel": {
+    "description": "Label for player name text field"
+  },
+  "playerNameHint": "e.g. Virat Kohli",
+  "@playerNameHint": {
+    "description": "Placeholder hint in player name field"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Generic cancel button label"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Generic add button label"
+  },
+  "nameCannotBeEmpty": "Player name cannot be empty",
+  "@nameCannotBeEmpty": {
+    "description": "Validation error for empty player name"
+  },
+  "nameAlreadyExists": "A player with this name already exists",
+  "@nameAlreadyExists": {
+    "description": "Validation error for duplicate player name"
+  },
+  "nameTooLong": "Name cannot exceed 50 characters",
+  "@nameTooLong": {
+    "description": "Validation error when player name exceeds length"
+  },
+
+  "editAvailabilityTitle": "Edit Availability",
+  "@editAvailabilityTitle": {
+    "description": "Title of availability bottom sheet modal"
+  },
+  "quickPresetsTitle": "Quick Presets (Tap to Add)",
+  "@quickPresetsTitle": {
+    "description": "Header for quick tap presets"
+  },
+  "presetEvening": "Evening 5-8",
+  "@presetEvening": {
+    "description": "Preset name: Evening 5pm to 8pm"
+  },
+  "presetWeekendMorning": "Weekend morning",
+  "@presetWeekendMorning": {
+    "description": "Preset name: Weekend morning 8am to 11am"
+  },
+  "presetMorning": "Morning 7-10",
+  "@presetMorning": {
+    "description": "Preset name: Morning 7am to 10am"
+  },
+  "presetAfternoon": "Afternoon 2-5",
+  "@presetAfternoon": {
+    "description": "Preset name: Afternoon 2pm to 5pm"
+  },
+  "customRangeTitle": "Custom Range Picker (30-min steps)",
+  "@customRangeTitle": {
+    "description": "Header for manual start/end dropdowns"
+  },
+  "startTimeLabel": "Start Time",
+  "@startTimeLabel": {
+    "description": "Label for start time dropdown"
+  },
+  "endTimeLabel": "End Time",
+  "@endTimeLabel": {
+    "description": "Label for end time dropdown"
+  },
+  "addSlotButton": "Add Time Slot",
+  "@addSlotButton": {
+    "description": "Button to add selected start/end range"
+  },
+  "scheduledSlotsTitle": "Scheduled Slots for {day}",
+  "@scheduledSlotsTitle": {
+    "description": "Header for scheduled slots list",
+    "placeholders": {
+      "day": {
+        "type": "String",
+        "example": "Today"
+      }
+    }
+  },
+  "noSlotsForDay": "No slots scheduled for this day yet.",
+  "@noSlotsForDay": {
+    "description": "Message when day has 0 availability slots"
+  },
+  "saveAvailabilityButton": "Save Availability",
+  "@saveAvailabilityButton": {
+    "description": "Primary action button to commit availability"
+  },
+  "slotEndMustBeAfterStart": "End time must be after start time",
+  "@slotEndMustBeAfterStart": {
+    "description": "Validation error when end time is before or equal to start"
+  },
+  "midnight": "Midnight (12:00 AM)",
+  "@midnight": {
+    "description": "Time label for midnight"
+  },
+
+  "settingsScreenTitle": "Settings & Preferences",
+  "@settingsScreenTitle": {
+    "description": "Title of settings screen"
+  },
+  "matchSettingsSection": "Match Preferences",
+  "@matchSettingsSection": {
+    "description": "Section header for match rules and defaults"
+  },
+  "defaultBallType": "Default Ball Type",
+  "@defaultBallType": {
+    "description": "Title for ball type setting"
+  },
+  "defaultDuration": "Default Match Duration",
+  "@defaultDuration": {
+    "description": "Title for match duration setting"
+  },
+  "squadQuorum": "Minimum Squad Quorum",
+  "@squadQuorum": {
+    "description": "Title for squad quorum setting"
+  },
+  "quorumDescription": "{count, plural, =1{1 player required for a valid session} other{{count} players required for a valid session}}",
+  "@quorumDescription": {
+    "description": "Description of active quorum requirement",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+  "appPreferencesSection": "App Preferences",
+  "@appPreferencesSection": {
+    "description": "Section header for theme and language"
+  },
+  "appTheme": "Theme",
+  "@appTheme": {
+    "description": "Title for theme setting"
+  },
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "System default theme mode option"
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Light theme mode option"
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Dark theme mode option"
+  },
+  "appLanguage": "Language",
+  "@appLanguage": {
+    "description": "Title for language selection"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageHindi": "हिन्दी",
+  "@languageHindi": {
+    "description": "Hindi language option"
+  },
+  "aboutSection": "About & Data Sources",
+  "@aboutSection": {
+    "description": "Section header for data attribution and version"
+  },
+  "dataAttribution": "Data Attribution",
+  "@dataAttribution": {
+    "description": "Title for data attribution tile"
+  },
+  "dataAttributionSubtitle": "Weather forecasts provided by Open-Meteo.com under CC BY 4.0 license",
+  "@dataAttributionSubtitle": {
+    "description": "Subtitle describing Open-Meteo data license"
+  },
+  "openMeteoWebsite": "Open-Meteo.com",
+  "@openMeteoWebsite": {
+    "description": "Link text for Open-Meteo website"
+  },
+  "homePitch": "Default Ground / Location",
+  "@homePitch": {
+    "description": "Title for default ground tile"
+  },
+  "homePitchSubtitle": "Currently using: {name}",
+  "@homePitchSubtitle": {
+    "description": "Subtitle showing active selected cricket ground",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Lord's Cricket Ground"
+      }
+    }
+  },
+  "versionInfo": "CricketMate Version 1.0.0",
+  "@versionInfo": {
+    "description": "Application version information"
+  }
+}

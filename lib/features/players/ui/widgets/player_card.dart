@@ -81,7 +81,10 @@ class PlayerCard extends StatelessWidget {
                       icon: const Icon(Icons.edit_calendar_outlined, size: 20),
                       tooltip: 'Edit availability for ${player.name}',
                       onPressed: onEditAvailability,
-                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(
+                        minWidth: 48,
+                        minHeight: 48,
+                      ),
                     ),
                     IconButton(
                       icon: Icon(
@@ -91,7 +94,10 @@ class PlayerCard extends StatelessWidget {
                       ),
                       tooltip: 'Remove ${player.name}',
                       onPressed: onDelete,
-                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(
+                        minWidth: 48,
+                        minHeight: 48,
+                      ),
                     ),
                   ],
                 ),

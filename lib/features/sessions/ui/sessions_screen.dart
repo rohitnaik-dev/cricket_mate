@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
+import '../../../core/errors/app_exception_localizer.dart';
+import '../../../core/l10n/app_localizations.dart';
 import '../../../core/state/view_state.dart';
 import '../../players/state/players_controller.dart';
 import '../../settings/state/settings_controller.dart';
@@ -66,13 +68,15 @@ class SessionsScreen extends ConsumerWidget {
       return const SessionScreenShimmer();
     }
 
+    final l10n = context.l10n;
+
     // 2. Weather failure state
     if (weatherState case ViewFailure(:final exception)) {
       return SessionEmptyView(
         icon: Icons.cloud_off,
-        title: 'Unable to Load Weather',
-        message: exception.messageKey,
-        actionLabel: 'Retry',
+        title: l10n.unableToLoadWeather,
+        message: exception.getLocalizedMessage(context),
+        actionLabel: l10n.retry,
         onAction: () => ref.read(weatherControllerProvider.notifier).refresh(),
         isError: true,
       );
@@ -82,9 +86,9 @@ class SessionsScreen extends ConsumerWidget {
     if (ref.watch(selectedPlaceProvider) == null) {
       return SessionEmptyView(
         icon: Icons.location_searching,
-        title: 'Choose a Cricket Ground',
-        message: 'Use the search bar above to search for your local cricket ground or city to check conditions.',
-        actionLabel: 'Search Location',
+        title: l10n.searchPrompt,
+        message: l10n.searchPromptSubtitle,
+        actionLabel: l10n.searchLocationButton,
         onAction: () {},
       );
     }

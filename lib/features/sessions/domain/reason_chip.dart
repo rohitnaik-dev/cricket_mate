@@ -15,25 +15,40 @@ enum ReasonTone {
 
 /// Descriptive chip highlighting a positive or negative factor affecting a session score.
 class ReasonChip {
-  const ReasonChip({required this.message, required this.tone});
+  const ReasonChip({
+    required this.message,
+    required this.tone,
+    this.messageKey,
+    this.arguments,
+  });
 
   /// Factory for a positive reason.
-  const ReasonChip.positive(this.message) : tone = ReasonTone.positive;
+  const ReasonChip.positive(this.message, {this.messageKey, this.arguments})
+    : tone = ReasonTone.positive;
 
   /// Factory for a negative reason.
-  const ReasonChip.negative(this.message) : tone = ReasonTone.negative;
+  const ReasonChip.negative(this.message, {this.messageKey, this.arguments})
+    : tone = ReasonTone.negative;
 
   /// Factory for a warning reason.
-  const ReasonChip.warning(this.message) : tone = ReasonTone.warning;
+  const ReasonChip.warning(this.message, {this.messageKey, this.arguments})
+    : tone = ReasonTone.warning;
 
   /// Factory for an informational reason.
-  const ReasonChip.neutral(this.message) : tone = ReasonTone.neutral;
+  const ReasonChip.neutral(this.message, {this.messageKey, this.arguments})
+    : tone = ReasonTone.neutral;
 
   /// Human-readable explanation.
   final String message;
 
   /// Categorical tone.
   final ReasonTone tone;
+
+  /// Localization message key for UI presentation.
+  final String? messageKey;
+
+  /// Optional parameters for localization interpolation.
+  final Map<String, dynamic>? arguments;
 
   /// Convenience helper to check if this factor is positive.
   bool get isPositive => tone == ReasonTone.positive;
