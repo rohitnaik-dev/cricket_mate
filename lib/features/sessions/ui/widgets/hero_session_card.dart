@@ -226,11 +226,14 @@ class HeroSessionCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      ScoreRing(
-                        score: session.score,
-                        rating: session.rating,
-                        size: 64,
-                        showLabel: true,
+                      SizedBox(
+                        width: 80,
+                        child: ScoreRing(
+                          score: session.score,
+                          rating: session.rating,
+                          size: 64,
+                          showLabel: true,
+                        ),
                       ),
                     ],
                   ),

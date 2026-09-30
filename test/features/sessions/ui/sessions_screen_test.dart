@@ -248,6 +248,36 @@ void main() {
     );
 
     testWidgets(
+      'tapping "Search Location" button requests focus on search input field',
+      (tester) async {
+        await tester.pumpWidget(
+          createSubject(
+            prefs: prefs,
+            additionalOverrides: [
+              selectedPlaceProvider.overrideWith((ref) => null),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SessionEmptyView), findsOneWidget);
+        expect(find.text('Search Location'), findsOneWidget);
+
+        final searchTextFieldFinder = find.byType(TextField);
+        expect(searchTextFieldFinder, findsOneWidget);
+
+        final textFieldBefore = tester.widget<TextField>(searchTextFieldFinder);
+        expect(textFieldBefore.focusNode?.hasFocus, isFalse);
+
+        await tester.tap(find.text('Search Location'));
+        await tester.pumpAndSettle();
+
+        final textFieldAfter = tester.widget<TextField>(searchTextFieldFinder);
+        expect(textFieldAfter.focusNode?.hasFocus, isTrue);
+      },
+    );
+
+    testWidgets(
       'offline banner with last-updated appears for cached data using fake repository',
       (tester) async {
         final cachedTime = DateTime.now().subtract(const Duration(minutes: 15));

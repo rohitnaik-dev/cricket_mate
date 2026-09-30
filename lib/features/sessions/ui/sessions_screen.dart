@@ -25,11 +25,24 @@ import 'widgets/session_shimmer.dart';
 /// Main screen displaying recommended cricket playing sessions,
 /// debounced place search, live/offline weather freshness, filter chips,
 /// and responsive single-column or two-column landscape layouts.
-class SessionsScreen extends ConsumerWidget {
+class SessionsScreen extends ConsumerStatefulWidget {
   const SessionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SessionsScreen> createState() => _SessionsScreenState();
+}
+
+class _SessionsScreenState extends ConsumerState<SessionsScreen> {
+  final FocusNode _searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final weatherState = ref.watch(weatherControllerProvider);
     final sessionsState = ref.watch(sessionsControllerProvider);
     final playersState = ref.watch(playersControllerProvider);
@@ -38,7 +51,7 @@ class SessionsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const PlaceSearchField(),
+        title: PlaceSearchField(focusNode: _searchFocusNode),
         elevation: 0,
         scrolledUnderElevation: 2,
       ),
@@ -89,7 +102,9 @@ class SessionsScreen extends ConsumerWidget {
         title: l10n.searchPrompt,
         message: l10n.searchPromptSubtitle,
         actionLabel: l10n.searchLocationButton,
-        onAction: () {},
+        onAction: () {
+          FocusScope.of(context).requestFocus(_searchFocusNode);
+        },
       );
     }
 

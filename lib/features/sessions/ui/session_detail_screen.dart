@@ -345,13 +345,22 @@ class SessionDetailScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    ScoreRing(
-                      score: candidate.score,
-                      rating: candidate.rating,
-                      size: 76.0,
-                      strokeWidth: 7.0,
-                      showLabel: true,
-                      animate: true,
+                    SizedBox(
+                      width: 88,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ScoreRing(
+                            score: candidate.score,
+                            rating: candidate.rating,
+                            size: 72.0,
+                            strokeWidth: 6.5,
+                            showLabel: true,
+                            animate: true,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

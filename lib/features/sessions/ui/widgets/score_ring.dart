@@ -50,6 +50,7 @@ class ScoreRing extends StatelessWidget {
           'Session rating score: ${score.round()} out of 100, ${rating.label}',
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (animate)
             TweenAnimationBuilder<double>(
@@ -111,17 +112,24 @@ class ScoreRing extends StatelessWidget {
           if (showLabel) ...[
             const SizedBox(height: 4),
             Container(
+              constraints: BoxConstraints(maxWidth: size + 24),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(
-                rating.label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: color,
+              alignment: Alignment.center,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  rating.label,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
                 ),
               ),
             ),

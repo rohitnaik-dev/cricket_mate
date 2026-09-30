@@ -8,7 +8,10 @@ import '../../../weather/state/place_controller.dart';
 /// App-bar search field providing 400ms debounced place search,
 /// active ground location display, and a dropdown overlay of search results.
 class PlaceSearchField extends ConsumerStatefulWidget {
-  const PlaceSearchField({super.key});
+  const PlaceSearchField({super.key, this.focusNode});
+
+  /// External focus node to control focus from parent widgets.
+  final FocusNode? focusNode;
 
   @override
   ConsumerState<PlaceSearchField> createState() => _PlaceSearchFieldState();
@@ -16,18 +19,31 @@ class PlaceSearchField extends ConsumerStatefulWidget {
 
 class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
   final TextEditingController _textController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  FocusNode? _internalFocusNode;
+  FocusNode get _effectiveFocusNode =>
+      widget.focusNode ?? (_internalFocusNode ??= FocusNode());
   final OverlayPortalController _overlayController = OverlayPortalController();
   final LayerLink _layerLink = LayerLink();
 
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(_handleFocusChanged);
+    _effectiveFocusNode.addListener(_handleFocusChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant PlaceSearchField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.focusNode != oldWidget.focusNode) {
+      (oldWidget.focusNode ?? _internalFocusNode)?.removeListener(
+        _handleFocusChanged,
+      );
+      _effectiveFocusNode.addListener(_handleFocusChanged);
+    }
   }
 
   void _handleFocusChanged() {
-    if (_focusNode.hasFocus) {
+    if (_effectiveFocusNode.hasFocus) {
       if (_textController.text.trim().isNotEmpty) {
         _overlayController.show();
       }
@@ -38,8 +54,8 @@ class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
 
   @override
   void dispose() {
-    _focusNode.removeListener(_handleFocusChanged);
-    _focusNode.dispose();
+    _effectiveFocusNode.removeListener(_handleFocusChanged);
+    _internalFocusNode?.dispose();
     _textController.dispose();
     super.dispose();
   }
@@ -58,7 +74,7 @@ class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
   void _onPlaceSelected(Place place) {
     ref.read(placeControllerProvider.notifier).selectPlace(place);
     _textController.clear();
-    _focusNode.unfocus();
+    _effectiveFocusNode.unfocus();
     _overlayController.hide();
   }
 
@@ -76,7 +92,7 @@ class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
     final isSearching = placeState.searchState.isLoading;
 
     ref.listen<PlaceState>(placeControllerProvider, (previous, next) {
-      if (!_focusNode.hasFocus) return;
+      if (!_effectiveFocusNode.hasFocus) return;
       if (next.query.trim().isEmpty && _overlayController.isShowing) {
         _overlayController.hide();
       } else if (next.query.trim().isNotEmpty &&
@@ -97,8 +113,8 @@ class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
         child: TapRegion(
           groupId: 'place_search_field',
           onTapOutside: (_) {
-            if (_focusNode.hasFocus) {
-              _focusNode.unfocus();
+            if (_effectiveFocusNode.hasFocus) {
+              _effectiveFocusNode.unfocus();
               _overlayController.hide();
             }
           },
@@ -110,9 +126,14 @@ class _PlaceSearchFieldState extends ConsumerState<PlaceSearchField> {
               height: 42,
               child: TextField(
                 controller: _textController,
-                focusNode: _focusNode,
+                focusNode: _effectiveFocusNode,
                 textInputAction: TextInputAction.search,
                 onChanged: _onQueryChanged,
+                onTap: () {
+                  if (!_effectiveFocusNode.hasFocus) {
+                    FocusScope.of(context).requestFocus(_effectiveFocusNode);
+                  }
+                },
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
