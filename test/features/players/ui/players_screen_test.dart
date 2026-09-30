@@ -160,6 +160,57 @@ void main() {
     );
 
     testWidgets(
+      'availability editor: setting availability for Tomorrow displays under Tmrw on PlayerCard (NOT Today)',
+      (tester) async {
+        final repo = PlayerRepositoryImpl(prefs);
+        await repo.addPlayer(Player(id: 'p1', name: 'Rohit Sharma'));
+
+        await tester.pumpWidget(createSubject(prefs: prefs));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Rohit Sharma'), findsOneWidget);
+        expect(find.text('Today: No slots'), findsOneWidget);
+        expect(find.text('Tmrw: No slots'), findsOneWidget);
+
+        // Tap Edit Calendar icon on player card
+        await tester.tap(find.byIcon(Icons.edit_calendar_outlined));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AvailabilityEditorModal), findsOneWidget);
+
+        // Switch to "Tomorrow" tab in the modal
+        final tomorrowModalTab = find.descendant(
+          of: find.byType(AvailabilityEditorModal),
+          matching: find.text('Tomorrow'),
+        );
+        await tester.tap(tomorrowModalTab);
+        await tester.pumpAndSettle();
+
+        // Tap Evening 5-8 preset
+        await tester.tap(find.text('Evening 5-8'));
+        await tester.pumpAndSettle();
+
+        // Save
+        final saveBtn = find.widgetWithText(
+          FilledButton,
+          'Save Availability for Tomorrow',
+        );
+        await tester.ensureVisible(saveBtn);
+        await tester.tap(saveBtn);
+        await tester.pumpAndSettle();
+
+        // Modal closed
+        expect(find.byType(AvailabilityEditorModal), findsNothing);
+
+        // PlayerCard MUST show Today: No slots, and Tmrw: 5:00 PM - 8:00 PM!
+        expect(find.text('Today: No slots'), findsOneWidget);
+        expect(find.text('Tmrw: 5:00 PM - 8:00 PM'), findsOneWidget);
+        // It must NOT show "Today: 5:00 PM - 8:00 PM"
+        expect(find.text('Today: 5:00 PM - 8:00 PM'), findsNothing);
+      },
+    );
+
+    testWidgets(
       'live overlap preview updates dynamically when multiple players share availability',
       (tester) async {
         final repo = PlayerRepositoryImpl(prefs);

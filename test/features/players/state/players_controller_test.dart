@@ -89,5 +89,33 @@ void main() {
       verify(() => mockRepo.setAvailability('p1', testDate, [slot])).called(1);
       expect(controller.state.players.first.availability.length, equals(1));
     });
+
+    test('setAvailability for tomorrow updates tomorrowAvailability without changing selectedDate', () async {
+      final tomorrowDate = testDate.add(const Duration(days: 1));
+      final slotTomorrow = AvailabilitySlot(
+        start: DateTime(2026, 10, 1, 17, 0),
+        end: DateTime(2026, 10, 1, 20, 0),
+      );
+
+      when(() => mockRepo.setAvailability('p1', tomorrowDate, [slotTomorrow]))
+          .thenAnswer((_) async {});
+      when(() => mockRepo.getPlayersWithAvailability(testDate))
+          .thenAnswer((_) async => [player1]);
+      when(() => mockRepo.getAvailability('p1', tomorrowDate))
+          .thenAnswer((_) async => [slotTomorrow]);
+
+      controller = PlayersController(mockRepo, initialDate: testDate);
+      await controller.setAvailability('p1', tomorrowDate, [slotTomorrow]);
+
+      verify(() => mockRepo.setAvailability('p1', tomorrowDate, [slotTomorrow]))
+          .called(1);
+      expect(controller.state.selectedDate, equals(testDate));
+      expect(controller.state.todayAvailability['p1'], isEmpty);
+      expect(controller.state.tomorrowAvailability['p1']?.length, equals(1));
+      expect(
+        controller.state.tomorrowAvailability['p1']?.first.start.hour,
+        equals(17),
+      );
+    });
   });
 }

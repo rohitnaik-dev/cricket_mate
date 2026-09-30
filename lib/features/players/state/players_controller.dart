@@ -13,6 +13,7 @@ class PlayersState {
   const PlayersState({
     required this.selectedDate,
     this.playersState = const ViewState.empty(),
+    this.todayAvailability = const <String, List<AvailabilitySlot>>{},
     this.tomorrowAvailability = const <String, List<AvailabilitySlot>>{},
     this.nameValidationError,
   });
@@ -22,6 +23,9 @@ class PlayersState {
 
   /// ViewState containing the squad members with their availability for [selectedDate].
   final ViewState<List<Player>> playersState;
+
+  /// Map of player ID to availability slots for today.
+  final Map<String, List<AvailabilitySlot>> todayAvailability;
 
   /// Map of player ID to availability slots for tomorrow.
   final Map<String, List<AvailabilitySlot>> tomorrowAvailability;
@@ -36,6 +40,7 @@ class PlayersState {
   PlayersState copyWith({
     DateTime? selectedDate,
     ViewState<List<Player>>? playersState,
+    Map<String, List<AvailabilitySlot>>? todayAvailability,
     Map<String, List<AvailabilitySlot>>? tomorrowAvailability,
     String? nameValidationError,
     bool clearNameValidationError = false,
@@ -43,6 +48,7 @@ class PlayersState {
     return PlayersState(
       selectedDate: selectedDate ?? this.selectedDate,
       playersState: playersState ?? this.playersState,
+      todayAvailability: todayAvailability ?? this.todayAvailability,
       tomorrowAvailability: tomorrowAvailability ?? this.tomorrowAvailability,
       nameValidationError: clearNameValidationError
           ? null
@@ -56,6 +62,7 @@ class PlayersState {
     return other is PlayersState &&
         other.selectedDate == selectedDate &&
         other.playersState == playersState &&
+        mapEquals(other.todayAvailability, todayAvailability) &&
         mapEquals(other.tomorrowAvailability, tomorrowAvailability) &&
         other.nameValidationError == nameValidationError;
   }
@@ -64,6 +71,7 @@ class PlayersState {
   int get hashCode => Object.hash(
     selectedDate,
     playersState,
+    Object.hashAll(todayAvailability.entries),
     Object.hashAll(tomorrowAvailability.entries),
     nameValidationError,
   );
@@ -73,16 +81,18 @@ class PlayersState {
 /// delete undo, and availability scheduling for today and tomorrow.
 class PlayersController extends StateNotifier<PlayersState> {
   PlayersController(this._playerRepository, {DateTime? initialDate})
-    : super(PlayersState(selectedDate: initialDate ?? DateTime.now())) {
+    : _baseDate = initialDate,
+      super(PlayersState(selectedDate: initialDate ?? DateTime.now())) {
     loadPlayers();
   }
 
   final PlayerRepository _playerRepository;
+  final DateTime? _baseDate;
 
   Player? _lastDeletedPlayer;
   Map<DateTime, List<AvailabilitySlot>>? _lastDeletedAvailability;
 
-  /// Loads all players with availability for [date] as well as tomorrow.
+  /// Loads all players with availability for [date] as well as both today's and tomorrow's availability maps.
   Future<void> loadPlayers({DateTime? date}) async {
     final targetDate = date ?? state.selectedDate;
     state = state.copyWith(
@@ -91,36 +101,78 @@ class PlayersController extends StateNotifier<PlayersState> {
     );
 
     try {
+      final base = _baseDate ?? DateTime.now();
+      final todayDate = DateTime(base.year, base.month, base.day);
+      final tomorrowDate = todayDate.add(const Duration(days: 1));
+
       final players = await _playerRepository.getPlayersWithAvailability(
         targetDate,
       );
 
-      final tomorrowDate = DateTime(
-        targetDate.year,
-        targetDate.month,
-        targetDate.day + 1,
-      );
+      final isTargetToday =
+          targetDate.year == todayDate.year &&
+          targetDate.month == todayDate.month &&
+          targetDate.day == todayDate.day;
+
+      final isTargetTomorrow =
+          targetDate.year == tomorrowDate.year &&
+          targetDate.month == tomorrowDate.month &&
+          targetDate.day == tomorrowDate.day;
+
+      final todayMap = <String, List<AvailabilitySlot>>{};
       final tomorrowMap = <String, List<AvailabilitySlot>>{};
+
       for (final p in players) {
-        try {
-          final slots = await _playerRepository.getAvailability(
-            p.id,
-            tomorrowDate,
-          );
-          tomorrowMap[p.id] = slots;
-        } catch (_) {
-          tomorrowMap[p.id] = const [];
+        if (isTargetToday) {
+          todayMap[p.id] = p.availability;
+          try {
+            tomorrowMap[p.id] = await _playerRepository.getAvailability(
+              p.id,
+              tomorrowDate,
+            );
+          } catch (_) {
+            tomorrowMap[p.id] = const [];
+          }
+        } else if (isTargetTomorrow) {
+          tomorrowMap[p.id] = p.availability;
+          try {
+            todayMap[p.id] = await _playerRepository.getAvailability(
+              p.id,
+              todayDate,
+            );
+          } catch (_) {
+            todayMap[p.id] = const [];
+          }
+        } else {
+          try {
+            todayMap[p.id] = await _playerRepository.getAvailability(
+              p.id,
+              todayDate,
+            );
+          } catch (_) {
+            todayMap[p.id] = const [];
+          }
+          try {
+            tomorrowMap[p.id] = await _playerRepository.getAvailability(
+              p.id,
+              tomorrowDate,
+            );
+          } catch (_) {
+            tomorrowMap[p.id] = const [];
+          }
         }
       }
 
       if (players.isEmpty) {
         state = state.copyWith(
           playersState: const ViewState.empty('No squad members added yet.'),
+          todayAvailability: const {},
           tomorrowAvailability: const {},
         );
       } else {
         state = state.copyWith(
           playersState: ViewState.success(players),
+          todayAvailability: todayMap,
           tomorrowAvailability: tomorrowMap,
         );
       }
@@ -188,11 +240,11 @@ class PlayersController extends StateNotifier<PlayersState> {
       orElse: () => null,
     );
     if (player != null) {
-      final targetDate = state.selectedDate;
-      final today = DateTime(targetDate.year, targetDate.month, targetDate.day);
+      final base = _baseDate ?? DateTime.now();
+      final today = DateTime(base.year, base.month, base.day);
       final tomorrow = today.add(const Duration(days: 1));
 
-      final todaySlots = player.availability;
+      final todaySlots = state.todayAvailability[id] ?? player.availability;
       final tomorrowSlots =
           state.tomorrowAvailability[id] ?? <AvailabilitySlot>[];
 
@@ -236,7 +288,7 @@ class PlayersController extends StateNotifier<PlayersState> {
     List<AvailabilitySlot> slots,
   ) async {
     await _playerRepository.setAvailability(playerId, date, slots);
-    await loadPlayers(date: date);
+    await loadPlayers(date: state.selectedDate);
   }
 
   /// Updates the target planning date (Today or Tomorrow) and refreshes availability.

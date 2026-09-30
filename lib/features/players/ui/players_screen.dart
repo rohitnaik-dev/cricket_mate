@@ -176,7 +176,8 @@ class PlayersScreen extends ConsumerWidget {
 
         // List of Player Cards
         ...squad.map((player) {
-          final todaySlots = player.availability;
+          final todaySlots =
+              playersState.todayAvailability[player.id] ?? const [];
           final tomorrowSlots =
               playersState.tomorrowAvailability[player.id] ?? const [];
 
@@ -188,7 +189,8 @@ class PlayersScreen extends ConsumerWidget {
               context: context,
               player: player,
               initialDate: playersState.selectedDate,
-              initialSlots: todaySlots,
+              todaySlots: todaySlots,
+              tomorrowSlots: tomorrowSlots,
             ),
             onDelete: () => _handleDeletePlayer(context, ref, player),
           );
@@ -310,7 +312,8 @@ class PlayersScreen extends ConsumerWidget {
                 ),
               ),
               ...squad.map((player) {
-                final todaySlots = player.availability;
+                final todaySlots =
+                    playersState.todayAvailability[player.id] ?? const [];
                 final tomorrowSlots =
                     playersState.tomorrowAvailability[player.id] ?? const [];
 
@@ -322,7 +325,8 @@ class PlayersScreen extends ConsumerWidget {
                     context: context,
                     player: player,
                     initialDate: playersState.selectedDate,
-                    initialSlots: todaySlots,
+                    todaySlots: todaySlots,
+                    tomorrowSlots: tomorrowSlots,
                   ),
                   onDelete: () => _handleDeletePlayer(context, ref, player),
                 );

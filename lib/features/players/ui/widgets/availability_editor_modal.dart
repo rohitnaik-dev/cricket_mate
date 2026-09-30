@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +14,9 @@ class AvailabilityEditorModal extends ConsumerStatefulWidget {
     super.key,
     required this.player,
     required this.initialDate,
-    required this.initialSlots,
+    this.initialSlots = const [],
+    this.todaySlots = const [],
+    this.tomorrowSlots = const [],
   });
 
   /// Player being edited.
@@ -25,13 +28,24 @@ class AvailabilityEditorModal extends ConsumerStatefulWidget {
   /// Existing slots for the player on [initialDate].
   final List<AvailabilitySlot> initialSlots;
 
+  /// Existing slots for Today.
+  final List<AvailabilitySlot> todaySlots;
+
+  /// Existing slots for Tomorrow.
+  final List<AvailabilitySlot> tomorrowSlots;
+
   /// Static helper to display this modal bottom sheet.
   static Future<void> show({
     required BuildContext context,
     required Player player,
     required DateTime initialDate,
-    required List<AvailabilitySlot> initialSlots,
+    List<AvailabilitySlot>? initialSlots,
+    List<AvailabilitySlot>? todaySlots,
+    List<AvailabilitySlot>? tomorrowSlots,
   }) {
+    final resolvedToday = todaySlots ?? initialSlots ?? player.availability;
+    final resolvedTomorrow = tomorrowSlots ?? const <AvailabilitySlot>[];
+
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -42,7 +56,9 @@ class AvailabilityEditorModal extends ConsumerStatefulWidget {
       builder: (_) => AvailabilityEditorModal(
         player: player,
         initialDate: initialDate,
-        initialSlots: initialSlots,
+        initialSlots: initialSlots ?? resolvedToday,
+        todaySlots: resolvedToday,
+        tomorrowSlots: resolvedTomorrow,
       ),
     );
   }
@@ -55,6 +71,11 @@ class AvailabilityEditorModal extends ConsumerStatefulWidget {
 class _AvailabilityEditorModalState
     extends ConsumerState<AvailabilityEditorModal> {
   late DateTime _selectedDay;
+  late DateTime _today;
+  late DateTime _tomorrow;
+
+  late List<AvailabilitySlot> _todaySlots;
+  late List<AvailabilitySlot> _tomorrowSlots;
   late List<AvailabilitySlot> _currentSlots;
 
   // Range picker state (defaults to 17:00 - 20:00 "Evening")
@@ -66,38 +87,49 @@ class _AvailabilityEditorModalState
   @override
   void initState() {
     super.initState();
-    final now = widget.initialDate;
-    _selectedDay = DateTime(now.year, now.month, now.day);
-    _currentSlots = List<AvailabilitySlot>.from(widget.initialSlots);
+    final now = DateTime.now();
+    _today = DateTime(now.year, now.month, now.day);
+    _tomorrow = _today.add(const Duration(days: 1));
+
+    _todaySlots = List<AvailabilitySlot>.from(widget.todaySlots);
+    _tomorrowSlots = List<AvailabilitySlot>.from(widget.tomorrowSlots);
+
+    final isInitialTomorrow =
+        widget.initialDate.year == _tomorrow.year &&
+        widget.initialDate.month == _tomorrow.month &&
+        widget.initialDate.day == _tomorrow.day;
+
+    _selectedDay = isInitialTomorrow ? _tomorrow : _today;
+    _currentSlots = List<AvailabilitySlot>.from(
+      isInitialTomorrow ? _tomorrowSlots : _todaySlots,
+    );
   }
 
   void _switchDay(DateTime newDay) {
     if (_selectedDay == newDay) return;
+
+    final isLeavingToday =
+        _selectedDay.year == _today.year &&
+        _selectedDay.month == _today.month &&
+        _selectedDay.day == _today.day;
+
+    // Buffer the current day's working changes before switching
+    if (isLeavingToday) {
+      _todaySlots = List<AvailabilitySlot>.from(_currentSlots);
+    } else {
+      _tomorrowSlots = List<AvailabilitySlot>.from(_currentSlots);
+    }
+
     setState(() {
       _selectedDay = newDay;
-      // Load slots for newDay from controller's state
-      final state = ref.read(playersControllerProvider);
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-      final isToday =
-          newDay.year == today.year &&
-          newDay.month == today.month &&
-          newDay.day == today.day;
+      final isNewDayToday =
+          newDay.year == _today.year &&
+          newDay.month == _today.month &&
+          newDay.day == _today.day;
 
-      if (isToday) {
-        final p = state.players.cast<Player?>().firstWhere(
-          (p) => p?.id == widget.player.id,
-          orElse: () => null,
-        );
-        _currentSlots = List<AvailabilitySlot>.from(
-          p?.availability ?? widget.player.availability,
-        );
-      } else {
-        final slots =
-            state.tomorrowAvailability[widget.player.id] ??
-            <AvailabilitySlot>[];
-        _currentSlots = List<AvailabilitySlot>.from(slots);
-      }
+      _currentSlots = List<AvailabilitySlot>.from(
+        isNewDayToday ? _todaySlots : _tomorrowSlots,
+      );
     });
   }
 
@@ -143,9 +175,33 @@ class _AvailabilityEditorModalState
   }
 
   Future<void> _saveAndClose() async {
-    await ref
-        .read(playersControllerProvider.notifier)
-        .setAvailability(widget.player.id, _selectedDay, _currentSlots);
+    final isToday =
+        _selectedDay.year == _today.year &&
+        _selectedDay.month == _today.month &&
+        _selectedDay.day == _today.day;
+
+    if (isToday) {
+      _todaySlots = List<AvailabilitySlot>.from(_currentSlots);
+    } else {
+      _tomorrowSlots = List<AvailabilitySlot>.from(_currentSlots);
+    }
+
+    final notifier = ref.read(playersControllerProvider.notifier);
+    await notifier.setAvailability(
+      widget.player.id,
+      _selectedDay,
+      _currentSlots,
+    );
+
+    final otherDay = isToday ? _tomorrow : _today;
+    final otherSlots = isToday ? _tomorrowSlots : _todaySlots;
+    final originalOtherSlots = isToday
+        ? widget.tomorrowSlots
+        : widget.todaySlots;
+    if (!listEquals(otherSlots, originalOtherSlots)) {
+      await notifier.setAvailability(widget.player.id, otherDay, otherSlots);
+    }
+
     if (mounted) {
       Navigator.of(context).pop();
     }
